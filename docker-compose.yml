@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: sql123
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: sss
+      MYSQL_PASSWORD: sql123
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql 
+    networks:
+      - backend
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-ui
+    restart: always
+    ports:
+      - "8000:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: sql123
+    networks:
+      - backend
+
+volumes:
+  mysql_data:
+
+networks:
+  backend:
+
